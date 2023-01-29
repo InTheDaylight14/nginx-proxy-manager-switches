@@ -1,33 +1,48 @@
 """Tests for integration_blueprint api."""
 import asyncio
+import pytest
 
 import aiohttp
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
+from homeassistant.util import dt
+from custom_components.npm_switches.api import NpmSwitchesApiClient
 
-from custom_components.integration_blueprint.api import IntegrationBlueprintApiClient
+from .const import (
+    MOCK_NPM_URL,
+    MOCK_PROXY_HOSTS_LIST,
+    MOCK_PROXY_HOSTS_DICT,
+    MOCK_TOKEN,
+)
+
+pytestmark = pytest.mark.asyncio
 
 
 async def test_api(hass, aioclient_mock, caplog):
     """Test API calls."""
 
     # To test the api submodule, we first create an instance of our API client
-    api = IntegrationBlueprintApiClient("test", "test", async_get_clientsession(hass))
-
-    # Use aioclient_mock which is provided by `pytest_homeassistant_custom_components`
-    # to mock responses to aiohttp requests. In this case we are telling the mock to
-    # return {"test": "test"} when a `GET` call is made to the specified URL. We then
-    # call `async_get_data` which will make that `GET` request.
-    aioclient_mock.get(
-        "https://jsonplaceholder.typicode.com/posts/1", json={"test": "test"}
+    api = NpmSwitchesApiClient(
+        "test", "test", "http://test:81", async_get_clientsession(hass)
     )
-    assert await api.async_get_data() == {"test": "test"}
 
-    # We do the same for `async_set_title`. Note the difference in the mock call
-    # between the previous step and this one. We use `patch` here instead of `get`
-    # because we know that `async_set_title` calls `api_wrapper` with `patch` as the
-    # first parameter
-    aioclient_mock.patch("https://jsonplaceholder.typicode.com/posts/1")
-    assert await api.async_set_title("test") is None
+    aioclient_mock.post(
+        MOCK_NPM_URL + "/api/tokens",
+        json=MOCK_TOKEN,
+    )
+
+    await api.async_get_new_token()
+    assert api._token == MOCK_TOKEN["token"]
+    assert api._token_expires == dt.parse_datetime(MOCK_TOKEN["expires"])
+
+    aioclient_mock.get(
+        MOCK_NPM_URL + "/api/nginx/proxy-hosts",
+        json=MOCK_PROXY_HOSTS_LIST,
+    )
+
+    # print(await api.get_proxy_hosts())
+    assert await api.get_proxy_hosts() == MOCK_PROXY_HOSTS_DICT
+
+    assert api.get_npm_url == MOCK_NPM_URL
 
     # In order to get 100% coverage, we need to test `api_wrapper` to test the code
     # that isn't already called by `async_get_data` and `async_set_title`. Because the

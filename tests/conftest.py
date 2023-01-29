@@ -16,6 +16,8 @@
 # pytest includes fixtures OOB which you can use as defined on this page)
 from unittest.mock import patch
 
+from .const import MOCK_PROXY_HOSTS_DICT, MOCK_TOKEN
+
 import pytest
 
 pytest_plugins = "pytest_homeassistant_custom_component"
@@ -40,15 +42,52 @@ def skip_notifications_fixture():
         yield
 
 
-# This fixture, when used, will result in calls to async_get_data to return None. To have the call
+# This fixture, when used, will result in calls to get_proxy_hosts to return None. To have the call
 # return a value, we would add the `return_value=<VALUE_TO_RETURN>` parameter to the patch call.
 @pytest.fixture(name="bypass_get_data")
 def bypass_get_data_fixture():
     """Skip calls to get data from API."""
     with patch(
-        "custom_components.integration_blueprint.IntegrationBlueprintApiClient.async_get_data"
+        "custom_components.npm_switches.NpmSwitchesApiClient.get_proxy_hosts",
+        return_value=MOCK_PROXY_HOSTS_DICT,
     ):
         yield
+
+
+@pytest.fixture(name="bypass_get_data_api")
+def bypass_get_data_api_fixture():
+    """Skip calls to get data from API."""
+    with patch(
+        "custom_components.npm_switches.NpmSwitchesApiClient.get_proxy_hosts",
+        return_value=MOCK_PROXY_HOSTS_DICT,
+    ):
+        yield
+
+
+@pytest.fixture(name="bypass_new_token")
+def bypass_get_new_token_fixture():
+    """Skip calls to get data from API."""
+    with patch(
+        "custom_components.npm_switches.NpmSwitchesApiClient.async_get_new_token",
+        return_value=MOCK_TOKEN,
+    ):
+        yield
+
+
+# @pytest.fixture(name="bypass_get_data")
+# def bypass_get_data_fixture():
+#     """Skip calls to get data from API."""
+#     with patch("custom_components.npm_switches.NpmSwitchesApiClient.get_proxy_hosts"):
+#         yield
+
+##I don't know if we need this long-term???
+# @pytest.fixture(name="bypass_check_token_expiration")
+# def bypass_check_token_expiration():
+#     """Skip calls to check token expiration."""
+#     with patch(
+#         "custom_components.npm_switches.NpmSwitchesApiClient.async_check_token_expiration"
+#     ):
+#         yield
 
 
 # In this fixture, we are forcing calls to async_get_data to raise an Exception. This is useful
@@ -57,7 +96,17 @@ def bypass_get_data_fixture():
 def error_get_data_fixture():
     """Simulate error when retrieving data from API."""
     with patch(
-        "custom_components.integration_blueprint.IntegrationBlueprintApiClient.async_get_data",
+        "custom_components.npm_switches.NpmSwitchesApiClient.async_get_data",
+        side_effect=Exception,
+    ):
+        yield
+
+
+@pytest.fixture(name="error_on_get_new_token")
+def error_get_new_token_fixture():
+    """Simulate error when retrieving data from API."""
+    with patch(
+        "custom_components.npm_switches.NpmSwitchesApiClient.async_get_data",
         side_effect=Exception,
     ):
         yield

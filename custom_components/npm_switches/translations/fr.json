@@ -2,11 +2,12 @@
     "config": {
         "step": {
             "user": {
-                "title": "Blueprint",
-                "description": "Si vous avez besoin d'aide pour la configuration, regardez ici: https://github.com/custom-components/integration_blueprint",
+                "title": "NPM Exemple",
+                "description": "Si vous avez besoin d'aide pour la configuration, regardez ici: https://github.com/InTheDaylight14/nginx-proxy-manager-switches",
                 "data": {
                     "username": "Identifiant",
-                    "password": "Mot de Passe"
+                    "password": "Mot de Passe",
+                    "npm_url": "Nginx Proxy Manager URL ex. http://ip:port"
                 }
             }
         },

@@ -2,11 +2,12 @@
     "config": {
         "step": {
             "user": {
-                "title": "Blueprint",
-                "description": "Hvis du trenger hjep til konfigurasjon ta en titt her: https://github.com/custom-components/integration_blueprint",
+                "title": "NPM",
+                "description": "Hvis du trenger hjep til konfigurasjon ta en titt her: https://github.com/InTheDaylight14/nginx-proxy-manager-switches",
                 "data": {
                     "username": "Brukernavn",
-                    "password": "Passord"
+                    "password": "Passord",
+                    "npm_url": "http://ip:port"
                 }
             }
         },

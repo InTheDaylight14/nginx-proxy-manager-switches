@@ -4,8 +4,9 @@ from homeassistant.core import callback
 from homeassistant.helpers.aiohttp_client import async_create_clientsession
 import voluptuous as vol
 
-from .api import IntegrationBlueprintApiClient
+from .api import NpmSwitchesApiClient
 from .const import (
+    CONF_NPM_URL,
     CONF_PASSWORD,
     CONF_USERNAME,
     DOMAIN,
@@ -32,8 +33,15 @@ class BlueprintFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         #     return self.async_abort(reason="single_instance_allowed")
 
         if user_input is not None:
+            existing_entry = self._async_entry_for_username(user_input[CONF_USERNAME])
+            # if existing_entry and not self.reauth:
+            if existing_entry:
+                return self.async_abort(reason="already_configured")
+
             valid = await self._test_credentials(
-                user_input[CONF_USERNAME], user_input[CONF_PASSWORD]
+                user_input[CONF_USERNAME],
+                user_input[CONF_PASSWORD],
+                user_input[CONF_NPM_URL],
             )
             if valid:
                 return self.async_create_entry(
@@ -48,6 +56,7 @@ class BlueprintFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         # Provide defaults for form
         user_input[CONF_USERNAME] = ""
         user_input[CONF_PASSWORD] = ""
+        user_input[CONF_NPM_URL] = ""
 
         return await self._show_config_form(user_input)
 
@@ -64,21 +73,30 @@ class BlueprintFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                 {
                     vol.Required(CONF_USERNAME, default=user_input[CONF_USERNAME]): str,
                     vol.Required(CONF_PASSWORD, default=user_input[CONF_PASSWORD]): str,
+                    vol.Required(CONF_NPM_URL, default=user_input[CONF_NPM_URL]): str,
                 }
             ),
             errors=self._errors,
         )
 
-    async def _test_credentials(self, username, password):
+    async def _test_credentials(self, username, password, npm_url):
         """Return true if credentials is valid."""
         try:
             session = async_create_clientsession(self.hass)
-            client = IntegrationBlueprintApiClient(username, password, session)
-            await client.async_get_data()
+            client = NpmSwitchesApiClient(username, password, npm_url, session)
+            await client.async_get_new_token()
             return True
         except Exception:  # pylint: disable=broad-except
             pass
         return False
+
+    @callback
+    def _async_entry_for_username(self, username):
+        """Find an existing entry for a username."""
+        for entry in self._async_current_entries():
+            if entry.data.get(CONF_USERNAME) == username:
+                return entry
+        return None
 
 
 class BlueprintOptionsFlowHandler(config_entries.OptionsFlow):

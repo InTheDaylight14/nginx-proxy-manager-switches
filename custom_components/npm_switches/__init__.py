@@ -14,9 +14,10 @@ from homeassistant.exceptions import ConfigEntryNotReady
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
-from .api import IntegrationBlueprintApiClient
+from .api import NpmSwitchesApiClient
 
 from .const import (
+    CONF_NPM_URL,
     CONF_PASSWORD,
     CONF_USERNAME,
     DOMAIN,
@@ -24,7 +25,7 @@ from .const import (
     STARTUP_MESSAGE,
 )
 
-SCAN_INTERVAL = timedelta(seconds=30)
+SCAN_INTERVAL = timedelta(seconds=60)
 
 _LOGGER: logging.Logger = logging.getLogger(__package__)
 
@@ -42,11 +43,12 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
 
     username = entry.data.get(CONF_USERNAME)
     password = entry.data.get(CONF_PASSWORD)
+    npm_url = entry.data.get(CONF_NPM_URL)
 
     session = async_get_clientsession(hass)
-    client = IntegrationBlueprintApiClient(username, password, session)
+    client = NpmSwitchesApiClient(username, password, npm_url, session)
 
-    coordinator = BlueprintDataUpdateCoordinator(hass, client=client)
+    coordinator = NpmSwitchesUpdateCoordinator(hass, client=client)
     await coordinator.async_refresh()
 
     if not coordinator.last_update_success:
@@ -65,12 +67,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     return True
 
 
-class BlueprintDataUpdateCoordinator(DataUpdateCoordinator):
+class NpmSwitchesUpdateCoordinator(DataUpdateCoordinator):
     """Class to manage fetching data from the API."""
 
-    def __init__(
-        self, hass: HomeAssistant, client: IntegrationBlueprintApiClient
-    ) -> None:
+    def __init__(self, hass: HomeAssistant, client: NpmSwitchesApiClient) -> None:
         """Initialize."""
         self.api = client
         self.platforms = []
@@ -80,7 +80,7 @@ class BlueprintDataUpdateCoordinator(DataUpdateCoordinator):
     async def _async_update_data(self):
         """Update data via library."""
         try:
-            return await self.api.async_get_data()
+            return await self.api.get_proxy_hosts()
         except Exception as exception:
             raise UpdateFailed() from exception
 

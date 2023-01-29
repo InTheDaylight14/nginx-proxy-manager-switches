@@ -2,11 +2,12 @@
     "config": {
         "step": {
             "user": {
-                "title": "Blueprint",
-                "description": "If you need help with the configuration have a look here: https://github.com/custom-components/integration_blueprint",
+                "title": "NPM Instance",
+                "description": "If you need help with the configuration have a look here: https://github.com/InTheDaylight14/nginx-proxy-manager-switches",
                 "data": {
                     "username": "Username",
-                    "password": "Password"
+                    "password": "Password",
+                    "npm_url": "NPM URL ex. http://ip:port"
                 }
             }
         },
@@ -21,7 +22,6 @@
         "step": {
             "user": {
                 "data": {
-                    "binary_sensor": "Binary sensor enabled",
                     "sensor": "Sensor enabled",
                     "switch": "Switch enabled"
                 }

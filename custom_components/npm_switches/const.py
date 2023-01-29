@@ -1,7 +1,7 @@
-"""Constants for integration_blueprint."""
+"""Constants for NPM Switches."""
 # Base component constants
-NAME = "Integration blueprint"
-DOMAIN = "integration_blueprint"
+NAME = "NPM Switches"
+DOMAIN = "npm_switches"
 DOMAIN_DATA = f"{DOMAIN}_data"
 VERSION = "0.0.1"
 ATTRIBUTION = "Data provided by http://jsonplaceholder.typicode.com/"
@@ -14,16 +14,17 @@ ICON = "mdi:format-quote-close"
 BINARY_SENSOR_DEVICE_CLASS = "connectivity"
 
 # Platforms
-BINARY_SENSOR = "binary_sensor"
+# BINARY_SENSOR = "binary_sensor"
 SENSOR = "sensor"
 SWITCH = "switch"
-PLATFORMS = [BINARY_SENSOR, SENSOR, SWITCH]
+PLATFORMS = [SENSOR, SWITCH]
 
 
 # Configuration and options
 CONF_ENABLED = "enabled"
 CONF_USERNAME = "username"
 CONF_PASSWORD = "password"
+CONF_NPM_URL = "npm_url"
 
 # Defaults
 DEFAULT_NAME = DOMAIN

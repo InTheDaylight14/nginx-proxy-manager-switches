@@ -5,8 +5,7 @@ from homeassistant import config_entries, data_entry_flow
 import pytest
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
-from custom_components.integration_blueprint.const import (
-    BINARY_SENSOR,
+from custom_components.npm_switches.const import (
     DOMAIN,
     PLATFORMS,
     SENSOR,
@@ -15,6 +14,8 @@ from custom_components.integration_blueprint.const import (
 
 from .const import MOCK_CONFIG
 
+pytestmark = pytest.mark.asyncio
+
 
 # This fixture bypasses the actual setup of the integration
 # since we only want to test the config flow. We test the
@@ -22,11 +23,8 @@ from .const import MOCK_CONFIG
 @pytest.fixture(autouse=True)
 def bypass_setup_fixture():
     """Prevent setup."""
-    with patch(
-        "custom_components.integration_blueprint.async_setup",
-        return_value=True,
-    ), patch(
-        "custom_components.integration_blueprint.async_setup_entry",
+    with patch("custom_components.npm_switches.async_setup", return_value=True,), patch(
+        "custom_components.npm_switches.async_setup_entry",
         return_value=True,
     ):
         yield
@@ -35,14 +33,14 @@ def bypass_setup_fixture():
 # Here we simiulate a successful config flow from the backend.
 # Note that we use the `bypass_get_data` fixture here because
 # we want the config flow validation to succeed during the test.
-async def test_successful_config_flow(hass, bypass_get_data):
+async def test_successful_config_flow(hass, bypass_new_token):
     """Test a successful config flow."""
     # Initialize a config flow
     result = await hass.config_entries.flow.async_init(
         DOMAIN, context={"source": config_entries.SOURCE_USER}
     )
 
-    # Check that the config flow shows the user form as the first step
+    #     # Check that the config flow shows the user form as the first step
     assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
     assert result["step_id"] == "user"
 
@@ -64,8 +62,10 @@ async def test_successful_config_flow(hass, bypass_get_data):
 # We use the `error_on_get_data` mock instead of `bypass_get_data`
 # (note the function parameters) to raise an Exception during
 # validation of the input config.
-async def test_failed_config_flow(hass, error_on_get_data):
+async def test_failed_config_flow(hass, error_on_get_new_token):
     """Test a failed config flow due to credential validation failure."""
+    print("Can I see this?")
+    assert True
     result = await hass.config_entries.flow.async_init(
         DOMAIN, context={"source": config_entries.SOURCE_USER}
     )
@@ -107,4 +107,4 @@ async def test_options_flow(hass):
     assert result["title"] == "test_username"
 
     # Verify that the options were updated
-    assert entry.options == {BINARY_SENSOR: True, SENSOR: False, SWITCH: True}
+    assert entry.options == {SENSOR: False, SWITCH: True}
