@@ -50,13 +50,13 @@ class NpmSwitchesBinarySwitch(NpmSwitchesEntity, SwitchEntity):
     async def async_turn_on(self, **kwargs):  # pylint: disable=unused-argument
         """Turn on the switch."""
         await self.coordinator.api.enable_proxy(self.proxy_id)
-        await self.async_write_ha_state()
+        self.async_write_ha_state()
         self.proxy = await self.coordinator.api.get_proxy(self.proxy_id)
 
     async def async_turn_off(self, **kwargs):  # pylint: disable=unused-argument
         """Turn off the switch."""
         await self.coordinator.api.disable_proxy(self.proxy_id)
-        await self.async_write_ha_state()
+        self.async_write_ha_state()
         self.proxy = await self.coordinator.api.get_proxy(self.proxy_id)
 
     # @property
