@@ -8,5 +8,5 @@
   "documentation": "https://github.com/InTheDaylight14/nginx-proxy-manager-switches",
   "iot_class": "cloud_polling",
   "issue_tracker": "https://github.com/InTheDaylight14/nginx-proxy-manager-switches/issues",
-  "version": "0.0.0"
+  "version": "1.0.1"
 }
