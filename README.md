@@ -19,7 +19,7 @@
 
 1. Use [HACS](https://hacs.xyz/docs/setup/download), in `HACS > Integrations > Explore & Add Repositories` search for "NPM Switches".
 2. Restart Home Assistant.
-3. [![Add Integration][add-integration-badge]][add-integration] or in the HA UI go to "Configuration" -> "Integrations" click "+" and search for "Tesla Custom Integration".
+3. [![Add Integration][add-integration-badge]][add-integration] or in the HA UI go to "Configuration" -> "Integrations" click "+" and search for "NPM Switches".
 
 ### Manual Download
 1. Use the tool of choice to open the directory (folder) for your HA configuration (where you find `configuration.yaml`).
@@ -27,7 +27,7 @@
 4. Download this repository's files.
 5. Move or Copy the the entire `npm_switches/` directory (folder) in your HA `custom_components` directory (folder). End result should look like `custom_components/npm_switches/`.
 6. Restart Home Assistant.
-7. [![Add Integration][add-integration-badge]][add-integration] or in the HA UI go to "Configuration" -> "Integrations" click "+" and search for "Tesla Custom Integration".
+7. [![Add Integration][add-integration-badge]][add-integration] or in the HA UI go to "Configuration" -> "Integrations" click "+" and search for "NPM Switches".
 
 ## Usage
 
