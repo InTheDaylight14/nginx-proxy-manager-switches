@@ -5,7 +5,7 @@ DOMAIN = "npm_switches"
 DOMAIN_DATA = f"{DOMAIN}_data"
 VERSION = "0.0.1"
 ATTRIBUTION = "Data provided by http://jsonplaceholder.typicode.com/"
-ISSUE_URL = "https://github.com/custom-components/integration_blueprint/issues"
+ISSUE_URL = "https://github.com/InTheDaylight14/nginx-proxy-manager-switches/issues"
 
 # Icons
 ICON = "mdi:format-quote-close"
