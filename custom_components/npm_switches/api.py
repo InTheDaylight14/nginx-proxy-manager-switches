@@ -77,7 +77,7 @@ class NpmSwitchesApiClient:
             await self.async_get_new_token()
         url = self._npm_url + "/api/nginx/redirection-hosts"
         redirection_hosts_list = await self.api_wrapper("get", url, headers=self._headers)
-        print(redirection_hosts_list)
+
         self.redirection_hosts_data = {}
         for redirection in redirection_hosts_list:
             self.redirection_hosts_data[str(redirection["id"])] = redirection
@@ -85,7 +85,6 @@ class NpmSwitchesApiClient:
                 self.num_redir_enabled += 1
             else:
                 self.num_redir_disabled += 1
-
         return self.redirection_hosts_data
 
     async def get_proxy(self, proxy_id: int) -> dict:
@@ -117,30 +116,34 @@ class NpmSwitchesApiClient:
         if utcnow > self._token_expires:
             await self.async_get_new_token()
 
-    async def enable_proxy(self, proxy_id: str) -> None:
-        """Enable the passed proxy"""
-        url = self._npm_url + "/api/nginx/proxy-hosts/" + proxy_id + "/enable"
+    async def enable_host(self, proxy_id: str, host_type: str) -> None:
+        """Enable the passed host
+           Host Type: proxy-hosts, redirection-hosts, streams, dead-hosts"""
+        url = self._npm_url + "/api/nginx/" + host_type + "/" + proxy_id + "/enable"
         response = await self.api_wrapper("post", url, headers=self._headers)
 
         if response is True:
             self.proxy_hosts_data[proxy_id]["enabled"] = 1
         elif "error" in response.keys():
             _LOGGER.error(
-                "Error enabling proxy id %s. Error message: '%s'",
+                "Error enabling host type %s host id %s. Error message: '%s'",
+                host_type,
                 proxy_id,
                 response["error"]["message"],
             )
 
-    async def disable_proxy(self, proxy_id: str) -> None:
-        """Disable the passed proxy"""
-        url = self._npm_url + "/api/nginx/proxy-hosts/" + proxy_id + "/disable"
+    async def disable_host(self, proxy_id: str, host_type: str) -> None:
+        """Disable the passed host.
+           Host Type: proxy-hosts, redirection-hosts, streams, dead-hosts"""
+        url = self._npm_url + "/api/nginx/" +host_type+ "/" + proxy_id + "/disable"
 
         response = await self.api_wrapper("post", url, headers=self._headers)
         if response is True:
             self.proxy_hosts_data[proxy_id]["enabled"] = 0
         elif "error" in response.keys():
             _LOGGER.error(
-                "Error enabling proxy id %s. Error message: '%s'",
+                "Error enabling host type %s host id %s. Error message: '%s'",
+                host_type,
                 proxy_id,
                 response["error"]["message"],
             )

@@ -22,13 +22,13 @@ async def async_setup_entry(hass, entry, async_add_entities):
 
     for proxy in proxy_hosts.values():
         # print(vars(proxy))
-        entities.append(NpmSwitchesBinarySwitch(coordinator, entry, proxy))
+        entities.append(NpmProxyBinarySwitch(coordinator, entry, proxy))
 
     async_add_entities(entities, True)
-    # async_add_devices([NpmSwitchesBinarySwitch(coordinator, entry, "20")])
+    # async_add_devices([NpmProxyBinarySwitch(coordinator, entry, "20")])
 
 
-class NpmSwitchesBinarySwitch(NpmSwitchesEntity, SwitchEntity):
+class NpmProxyBinarySwitch(NpmSwitchesEntity, SwitchEntity):
     """integration_blueprint switch class."""
 
     def __init__(
@@ -49,13 +49,13 @@ class NpmSwitchesBinarySwitch(NpmSwitchesEntity, SwitchEntity):
 
     async def async_turn_on(self, **kwargs):  # pylint: disable=unused-argument
         """Turn on the switch."""
-        await self.coordinator.api.enable_proxy(self.proxy_id)
+        await self.coordinator.api.enable_host(self.proxy_id, "proxy-hosts")
         self.async_write_ha_state()
         self.proxy = await self.coordinator.api.get_proxy(self.proxy_id)
 
     async def async_turn_off(self, **kwargs):  # pylint: disable=unused-argument
         """Turn off the switch."""
-        await self.coordinator.api.disable_proxy(self.proxy_id)
+        await self.coordinator.api.disable_host(self.proxy_id, "proxy-hosts")
         self.async_write_ha_state()
         self.proxy = await self.coordinator.api.get_proxy(self.proxy_id)
 
