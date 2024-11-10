@@ -33,8 +33,11 @@ class NpmSwitchesApiClient:
         self._token_expires = dt.utcnow()
         self._headers = None
         self.proxy_hosts_data = None
-        self.num_enabled = 0
-        self.num_disabled = 0
+        self.redirection_hosts_data = None
+        self.num_proxy_enabled = 0
+        self.num_proxy_disabled = 0
+        self.num_redir_enabled = 0
+        self.num_redir_disabled = 0
 
     async def async_get_data(self) -> dict:
         """Get data from the API."""
@@ -48,8 +51,8 @@ class NpmSwitchesApiClient:
 
     async def get_proxy_hosts(self) -> list():
         """Get a list of proxy-hosts."""
-        self.num_enabled = 0
-        self.num_disabled = 0
+        self.num_proxy_enabled = 0
+        self.num_proxy_disabled = 0
 
         if self._token is None:
             await self.async_get_new_token()
@@ -59,11 +62,31 @@ class NpmSwitchesApiClient:
         for proxy in proxy_hosts_list:
             self.proxy_hosts_data[str(proxy["id"])] = proxy
             if proxy["enabled"] == 1:
-                self.num_enabled += 1
+                self.num_proxy_enabled += 1
             else:
-                self.num_disabled += 1
+                self.num_proxy_disabled += 1
 
         return self.proxy_hosts_data
+
+    async def get_redirection_hosts(self) -> list():
+        """Get a list of redirection-hosts."""
+        self.num_redir_enabled = 0
+        self.num_redir_disabled = 0
+
+        if self._token is None:
+            await self.async_get_new_token()
+        url = self._npm_url + "/api/nginx/redirection-hosts"
+        redirection_hosts_list = await self.api_wrapper("get", url, headers=self._headers)
+        print(redirection_hosts_list)
+        self.redirection_hosts_data = {}
+        for redirection in redirection_hosts_list:
+            self.redirection_hosts_data[str(redirection["id"])] = redirection
+            if redirection["enabled"] == 1:
+                self.num_redir_enabled += 1
+            else:
+                self.num_redir_disabled += 1
+
+        return self.redirection_hosts_data
 
     async def get_proxy(self, proxy_id: int) -> dict:
         """Get a proxy by id."""
@@ -129,14 +152,14 @@ class NpmSwitchesApiClient:
         return False
 
     @property
-    def get_num_enabled(self) -> int:
+    def get_num_proxy_enabled(self) -> int:
         """Return the num enabled proxy hosts."""
-        return self.num_enabled
+        return self.num_proxy_enabled
 
     @property
-    def get_num_disabled(self) -> int:
+    def get_num_proxy_disabled(self) -> int:
         """Return the num disabled proxy hosts."""
-        return self.num_disabled
+        return self.num_proxy_disabled
 
     @property
     def get_npm_url(self) -> str:
