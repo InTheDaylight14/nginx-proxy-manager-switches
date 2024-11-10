@@ -32,7 +32,6 @@ class NpmSwitchesProxySensor(NpmSwitchesEntity, SensorEntity):
         super().__init__(coordinator, entry)
         self.proxy_id = name  # Unique ID relies on self.proxy_id
         self.sensor_name = self.proxy_id
-        self._attr_icon = "mdi:steering"
         self.friendly_name = "NPM " + self.sensor_name.capitalize() + " Proxy Hosts"
 
     # @property
@@ -50,7 +49,7 @@ class NpmSwitchesProxySensor(NpmSwitchesEntity, SensorEntity):
     @property
     def icon(self):
         """Return the icon of the sensor."""
-        return self._attr_icon
+        return "mdi:counter"
 
 class NpmSwitchesRedirSensor(NpmSwitchesEntity, SensorEntity):
     """NPM Switches Redir Sensor class."""
@@ -65,8 +64,7 @@ class NpmSwitchesRedirSensor(NpmSwitchesEntity, SensorEntity):
         super().__init__(coordinator, entry)
         self.redir_id = name  # Unique ID relies on self.redir_id
         self.sensor_name = self.redir_id
-        self._attr_icon = "mdi:steering"
-        self.friendly_name = "NPM " + self.sensor_name.capitalize() + " Redirection Hosts"
+        self.friendly_name = "NPM Redirection Hosts " + self.sensor_name.capitalize()
 
     # @property
     # def name(self):
@@ -83,4 +81,4 @@ class NpmSwitchesRedirSensor(NpmSwitchesEntity, SensorEntity):
     @property
     def icon(self):
         """Return the icon of the sensor."""
-        return self._attr_icon
+        return "mdi:counter"
