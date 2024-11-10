@@ -63,8 +63,8 @@ class NpmSwitchesRedirSensor(NpmSwitchesEntity, SensorEntity):
     ) -> None:
         """Initialize proxy switch entity."""
         super().__init__(coordinator, entry)
-        self.proxy_id = name  # Unique ID relies on self.proxy_id
-        self.sensor_name = self.proxy_id
+        self.redir_id = name  # Unique ID relies on self.redir_id
+        self.sensor_name = self.redir_id
         self._attr_icon = "mdi:steering"
         self.friendly_name = "NPM " + self.sensor_name.capitalize() + " Redirection Hosts"
 

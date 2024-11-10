@@ -79,7 +79,11 @@ class NpmSwitchesUpdateCoordinator(DataUpdateCoordinator):
     async def _async_update_data(self):
         """Update data via library."""
         try:
-            return await self.api.get_proxy_hosts()
+            await self.api.get_proxy_hosts()
+        except Exception as exception:
+            raise UpdateFailed() from exception
+        try:
+            await self.api.get_redirection_hosts()
         except Exception as exception:
             raise UpdateFailed() from exception
 
