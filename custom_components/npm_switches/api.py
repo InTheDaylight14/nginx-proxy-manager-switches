@@ -33,7 +33,7 @@ class NpmSwitchesApiClient:
         self._token_expires = dt.utcnow()
         self._headers = None
         self.proxy_hosts_data = None
-        self.redirection_hosts_data = None
+        self.redir_hosts_data = None
         self.num_proxy_enabled = 0
         self.num_proxy_disabled = 0
         self.num_redir_enabled = 0
@@ -78,18 +78,28 @@ class NpmSwitchesApiClient:
         url = self._npm_url + "/api/nginx/redirection-hosts"
         redirection_hosts_list = await self.api_wrapper("get", url, headers=self._headers)
 
-        self.redirection_hosts_data = {}
+        self.redir_hosts_data = {}
         for redirection in redirection_hosts_list:
-            self.redirection_hosts_data[str(redirection["id"])] = redirection
+            self.redir_hosts_data[str(redirection["id"])] = redirection
             if redirection["enabled"] == 1:
                 self.num_redir_enabled += 1
             else:
                 self.num_redir_disabled += 1
-        return self.redirection_hosts_data
+        return self.redir_hosts_data
 
-    async def get_proxy(self, proxy_id: int) -> dict:
-        """Get a proxy by id."""
-        return self.proxy_hosts_data[proxy_id]
+    async def get_host(self, host_id: int, host_type: str) -> dict:
+        """Get a host by id and type.
+        Host Type: proxy-hosts, redirection-hosts, streams, dead-hosts"""
+        if host_type == "proxy-hosts":
+            return self.proxy_hosts_data[host_id]
+        elif host_type == "redirection-hosts":
+            return self.redir_hosts_data[host_id]
+        # elif host_type == "streams":
+            # return self.stream_hosts_data[host_id]
+        # elif host_type == "dead-hosts":
+            # return self.dead_hosts_data[host_id]
+        else:
+            return None
 
     async def async_get_new_token(self) -> None:
         """Get a new token."""
@@ -116,44 +126,63 @@ class NpmSwitchesApiClient:
         if utcnow > self._token_expires:
             await self.async_get_new_token()
 
-    async def enable_host(self, proxy_id: str, host_type: str) -> None:
+    async def enable_host(self, host_id: str, host_type: str) -> None:
         """Enable the passed host
            Host Type: proxy-hosts, redirection-hosts, streams, dead-hosts"""
-        url = self._npm_url + "/api/nginx/" + host_type + "/" + proxy_id + "/enable"
+        url = self._npm_url + "/api/nginx/" + host_type + "/" + host_id + "/enable"
         response = await self.api_wrapper("post", url, headers=self._headers)
 
         if response is True:
-            self.proxy_hosts_data[proxy_id]["enabled"] = 1
+            self.proxy_hosts_data[host_id]["enabled"] = 1
         elif "error" in response.keys():
             _LOGGER.error(
                 "Error enabling host type %s host id %s. Error message: '%s'",
                 host_type,
-                proxy_id,
+                host_id,
                 response["error"]["message"],
             )
 
-    async def disable_host(self, proxy_id: str, host_type: str) -> None:
+    async def disable_host(self, host_id: str, host_type: str) -> None:
         """Disable the passed host.
            Host Type: proxy-hosts, redirection-hosts, streams, dead-hosts"""
-        url = self._npm_url + "/api/nginx/" +host_type+ "/" + proxy_id + "/disable"
+        url = self._npm_url + "/api/nginx/" +host_type+ "/" + host_id + "/disable"
 
         response = await self.api_wrapper("post", url, headers=self._headers)
         if response is True:
-            self.proxy_hosts_data[proxy_id]["enabled"] = 0
+            self.proxy_hosts_data[host_id]["enabled"] = 0
         elif "error" in response.keys():
             _LOGGER.error(
                 "Error enabling host type %s host id %s. Error message: '%s'",
                 host_type,
-                proxy_id,
+                host_id,
                 response["error"]["message"],
             )
 
-    def is_proxy_enabled(self, proxy_id: str) -> bool:
-        """Return True if the proxy is enabled"""
-        if self.proxy_hosts_data[proxy_id]["enabled"] == 1:
-            return True
-        return False
-
+    def is_host_enabled(self, host_id: str, host_type: str) -> bool:
+        """Return True if the proxy is enabled.
+            Host Type: proxy-hosts, redirection-hosts, streams, dead-hosts"""
+        if host_type == "proxy-hosts":
+            if self.proxy_hosts_data[host_id]["enabled"] == 1:
+                return True
+            else:
+                return False
+        elif host_type == "redirection-hosts":
+            if self.redir_hosts_data[host_id]["enabled"] == 1:
+                return True
+            else:
+                return False
+        # elif host_type == "streams":
+            # if self.stream_hosts_data[host_id]["enabled"] == 1:
+            #     return True
+            # else:
+            #     return False
+        # elif host_type == "dead-hosts":
+            # if self.dead_hosts_data[host_id]["enabled"] == 1:
+            #     return True
+            # else:
+            #     return False
+        else:
+            return None
     @property
     def get_num_proxy_enabled(self) -> int:
         """Return the num enabled proxy hosts."""
