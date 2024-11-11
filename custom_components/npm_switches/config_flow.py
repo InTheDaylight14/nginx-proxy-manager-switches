@@ -23,6 +23,7 @@ class BlueprintFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
     def __init__(self):
         """Initialize."""
         self._errors = {}
+        self.clean_npm_url = None
 
     async def async_step_user(self, user_input=None):
         """Handle a flow initialized by the user."""
@@ -33,7 +34,11 @@ class BlueprintFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         #     return self.async_abort(reason="single_instance_allowed")
 
         if user_input is not None:
-            existing_entry = self._async_entry_for_username(user_input[CONF_USERNAME])
+            scheme_end = user_input[CONF_NPM_URL].find("://")+3
+            self.clean_npm_url = user_input[CONF_NPM_URL][scheme_end:]
+
+            # existing_entry = self._async_entry_for_username(user_input[CONF_NPM_URL])
+            existing_entry = self._async_entry_for_username(self.clean_npm_url)
             # if existing_entry and not self.reauth:
             if existing_entry:
                 return self.async_abort(reason="already_configured")
@@ -45,7 +50,7 @@ class BlueprintFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             )
             if valid:
                 return self.async_create_entry(
-                    title=user_input[CONF_USERNAME], data=user_input
+                    title=self.clean_npm_url, data=user_input
                 )
             else:
                 self._errors["base"] = "auth"
@@ -56,7 +61,7 @@ class BlueprintFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         # Provide defaults for form
         user_input[CONF_USERNAME] = ""
         user_input[CONF_PASSWORD] = ""
-        user_input[CONF_NPM_URL] = ""
+        user_input[CONF_NPM_URL] = "http://"
 
         return await self._show_config_form(user_input)
 
@@ -94,7 +99,8 @@ class BlueprintFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
     def _async_entry_for_username(self, username):
         """Find an existing entry for a username."""
         for entry in self._async_current_entries():
-            if entry.data.get(CONF_USERNAME) == username:
+            # if entry.data.get(CONF_NPM_URL) == username:
+            if entry.title == username:
                 return entry
         return None
 
