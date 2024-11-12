@@ -7,7 +7,7 @@
                 "data": {
                     "username": "Username",
                     "password": "Password",
-                    "npm_url": "NPM URL ex. http://ip:port"
+                    "npm_url": "NPM URL including UI port number ex. http://ip:port"
                 }
             }
         },
@@ -23,7 +23,12 @@
             "user": {
                 "data": {
                     "sensor": "Sensor enabled",
-                    "switch": "Switch enabled"
+                    "switch": "Switch enabled",
+                    "include_proxy_hosts": "Include Proxy Hosts",
+                    "include_redirection_hosts": "Include Redirection Hosts",
+                    "include_stream_hosts": "Include Stream Hosts",
+                    "include_dead_hosts": "Include Dead Hosts",
+                    "include_enable_disable_count_sensors": "Include Enabled/Disabled Count Sensors"
                 }
             }
         }

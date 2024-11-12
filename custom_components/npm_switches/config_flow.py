@@ -11,6 +11,16 @@ from .const import (
     CONF_USERNAME,
     DOMAIN,
     PLATFORMS,
+    CONF_INDLUDE_PROXY,
+    CONF_INCLUDE_REDIR,
+    CONF_INCLUDE_STREAMS,
+    CONF_INCLUDE_DEAD,
+    CONF_INCLUDE_SENSORS,
+    DEFAULT_INDLUDE_PROXY,
+    DEFAULT_INCLUDE_REDIR,
+    DEFAULT_INCLUDE_STREAMS,
+    DEFAULT_INCLUDE_DEAD,
+    DEFAULT_INCLUDE_SENSORS,
 )
 
 
@@ -125,12 +135,40 @@ class BlueprintOptionsFlowHandler(config_entries.OptionsFlow):
 
         return self.async_show_form(
             step_id="user",
-            data_schema=vol.Schema(
+            data_schema = vol.Schema(
                 {
-                    vol.Required(x, default=self.options.get(x, True)): bool
-                    for x in sorted(PLATFORMS)
+                    vol.Optional(
+                        CONF_INDLUDE_PROXY,
+                        default=self.config_entry.options.get(
+                            CONF_INDLUDE_PROXY, DEFAULT_INDLUDE_PROXY
+                        ),
+                    ): bool,
+                    vol.Optional(
+                        CONF_INCLUDE_REDIR,
+                        default=self.config_entry.options.get(
+                            CONF_INCLUDE_REDIR, DEFAULT_INCLUDE_REDIR
+                        ),
+                    ): bool,
+                    vol.Optional(
+                        CONF_INCLUDE_STREAMS,
+                        default=self.config_entry.options.get(
+                            CONF_INCLUDE_STREAMS, DEFAULT_INCLUDE_STREAMS
+                        ),
+                    ): bool,
+                    vol.Optional(
+                        CONF_INCLUDE_DEAD,
+                        default=self.config_entry.options.get(
+                            CONF_INCLUDE_DEAD, DEFAULT_INCLUDE_DEAD
+                        ),
+                    ): bool,
+                    vol.Optional(
+                        CONF_INCLUDE_SENSORS,
+                        default=self.config_entry.options.get(
+                            CONF_INCLUDE_SENSORS, DEFAULT_INCLUDE_SENSORS
+                        ),
+                    ): bool,
                 }
-            ),
+            )
         )
 
     async def _update_options(self):

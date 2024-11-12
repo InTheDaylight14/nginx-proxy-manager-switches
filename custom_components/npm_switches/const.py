@@ -25,6 +25,16 @@ CONF_ENABLED = "enabled"
 CONF_USERNAME = "username"
 CONF_PASSWORD = "password"
 CONF_NPM_URL = "npm_url"
+CONF_INDLUDE_PROXY = "include_proxy_hosts"
+CONF_INCLUDE_REDIR = "include_redirection_hosts"
+CONF_INCLUDE_STREAMS = "include_stream_hosts"
+CONF_INCLUDE_DEAD = "include_dead_hosts"
+CONF_INCLUDE_SENSORS = "include_enable_disable_count_sensors"
+DEFAULT_INDLUDE_PROXY = True
+DEFAULT_INCLUDE_REDIR = False
+DEFAULT_INCLUDE_STREAMS = False
+DEFAULT_INCLUDE_DEAD = False
+DEFAULT_INCLUDE_SENSORS = True
 
 # Defaults
 DEFAULT_NAME = DOMAIN

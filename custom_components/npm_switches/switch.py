@@ -18,11 +18,9 @@ async def async_setup_entry(hass, entry, async_add_entities):
     api = hass.data[DOMAIN][entry.entry_id].api
     proxy_hosts = await api.get_proxy_hosts()
     redir_hosts = await api.get_redirection_hosts()
-    print(proxy_hosts)
     entities = []
 
     for proxy in proxy_hosts.values():
-        # print(vars(proxy))
         entities.append(NpmProxyBinarySwitch(coordinator, entry, proxy))
 
     for redir in redir_hosts.values():
@@ -49,7 +47,6 @@ class NpmProxyBinarySwitch(NpmSwitchesEntity, SwitchEntity):
         self.friendly_name = (
             "NPM " + self.proxy["domain_names"][0].replace(".", " ").capitalize()
         )
-        # print(self.friendly_name)
 
     async def async_turn_on(self, **kwargs):  # pylint: disable=unused-argument
         """Turn on the switch."""
