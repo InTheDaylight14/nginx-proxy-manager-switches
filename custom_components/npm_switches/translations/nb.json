@@ -7,7 +7,12 @@
                 "data": {
                     "username": "Brukernavn",
                     "password": "Passord",
-                    "npm_url": "http://ip:port"
+                    "npm_url": "http://ip:port",
+                    "include_proxy_hosts": "Inkluder proxy-verter",
+                    "include_redirection_hosts": "Inkluder omdirigeringsverter",
+                    "include_stream_hosts": "Inkluder strømverter",
+                    "include_dead_hosts": "Inkluder døde verter",
+                    "include_enable_disable_count_sensors": "Inkluder aktiverte/deaktiverte tellesensorer"
                 }
             }
         },
@@ -24,12 +29,7 @@
                 "data": {
                     "binary_sensor": "Binær sensor aktivert",
                     "sensor": "Sensor aktivert",
-                    "switch": "Bryter aktivert",
-                    "include_proxy_hosts": "Inkluder proxy-verter",
-                    "include_redirection_hosts": "Inkluder omdirigeringsverter",
-                    "include_stream_hosts": "Inkluder strømverter",
-                    "include_dead_hosts": "Inkluder døde verter",
-                    "include_enable_disable_count_sensors": "Inkluder aktiverte/deaktiverte tellesensorer"
+                    "switch": "Bryter aktivert"
                 }
             }
         }

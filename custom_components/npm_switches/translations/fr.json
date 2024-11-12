@@ -7,7 +7,12 @@
                 "data": {
                     "username": "Identifiant",
                     "password": "Mot de Passe",
-                    "npm_url": "Nginx Proxy Manager URL ex. http://ip:port"
+                    "npm_url": "Nginx Proxy Manager URL ex. http://ip:port",
+                    "include_proxy_hosts": "Inclure les hôtes proxy",
+                    "include_redirection_hosts": "Inclure les hôtes de redirection",
+                    "include_stream_hosts": "Inclure les hôtes de flux",
+                    "include_dead_hosts": "Inclure les hôtes morts",
+                    "include_enable_disable_count_sensors": "Inclure les capteurs de comptage activés/désactivés"
                 }
             }
         },
@@ -24,12 +29,7 @@
                 "data": {
                     "binary_sensor": "Capteur binaire activé",
                     "sensor": "Capteur activé",
-                    "switch": "Interrupteur activé",
-                    "include_proxy_hosts": "Inclure les hôtes proxy",
-                    "include_redirection_hosts": "Inclure les hôtes de redirection",
-                    "include_stream_hosts": "Inclure les hôtes de flux",
-                    "include_dead_hosts": "Inclure les hôtes morts",
-                    "include_enable_disable_count_sensors": "Inclure les capteurs de comptage activés/désactivés"
+                    "switch": "Interrupteur activé"
                 }
             }
         }

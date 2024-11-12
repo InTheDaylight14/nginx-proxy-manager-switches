@@ -16,6 +16,9 @@ from .const import (
     CONF_INCLUDE_STREAMS,
     CONF_INCLUDE_DEAD,
     CONF_INCLUDE_SENSORS,
+    DEFAULT_USERNAME,
+    DEFAULT_PASSWORD,
+    DEFAULT_NPM_URL,
     DEFAULT_INDLUDE_PROXY,
     DEFAULT_INCLUDE_REDIR,
     DEFAULT_INCLUDE_STREAMS,
@@ -67,28 +70,34 @@ class BlueprintFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
             return await self._show_config_form(user_input)
 
-        user_input = {}
-        # Provide defaults for form
-        user_input[CONF_USERNAME] = ""
-        user_input[CONF_PASSWORD] = ""
-        user_input[CONF_NPM_URL] = "http://"
+        # user_input = {}
+        # # Provide defaults for form
+        # user_input[CONF_USERNAME] = ""
+        # user_input[CONF_PASSWORD] = ""
+        # user_input[CONF_NPM_URL] = "http://"
+        # user_input[CONF_INDLUDE_PROXY] = True
 
-        return await self._show_config_form(user_input)
+        return await self._show_config_form()
 
-    @staticmethod
-    @callback
-    def async_get_options_flow(config_entry):
-        return BlueprintOptionsFlowHandler(config_entry)
+    # @staticmethod
+    # @callback
+    # def async_get_options_flow(config_entry):
+    #     return BlueprintOptionsFlowHandler(config_entry)
 
-    async def _show_config_form(self, user_input):  # pylint: disable=unused-argument
+    async def _show_config_form(self):  # pylint: disable=unused-argument
         """Show the configuration form to edit location data."""
         return self.async_show_form(
             step_id="user",
             data_schema=vol.Schema(
                 {
-                    vol.Required(CONF_USERNAME, default=user_input[CONF_USERNAME]): str,
-                    vol.Required(CONF_PASSWORD, default=user_input[CONF_PASSWORD]): str,
-                    vol.Required(CONF_NPM_URL, default=user_input[CONF_NPM_URL]): str,
+                    vol.Required(CONF_USERNAME, default=DEFAULT_USERNAME): str,
+                    vol.Required(CONF_PASSWORD, default=DEFAULT_PASSWORD): str,
+                    vol.Required(CONF_NPM_URL, default=DEFAULT_NPM_URL): str,
+                    vol.Optional(CONF_INCLUDE_SENSORS,default=DEFAULT_INCLUDE_SENSORS): bool,
+                    vol.Optional(CONF_INDLUDE_PROXY,default=DEFAULT_INDLUDE_PROXY): bool,
+                    vol.Optional(CONF_INCLUDE_REDIR,default=DEFAULT_INCLUDE_REDIR): bool,
+                    vol.Optional(CONF_INCLUDE_STREAMS,default=DEFAULT_INCLUDE_STREAMS): bool,
+                    vol.Optional(CONF_INCLUDE_DEAD,default=DEFAULT_INCLUDE_DEAD): bool
                 }
             ),
             errors=self._errors,
@@ -115,64 +124,59 @@ class BlueprintFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         return None
 
 
-class BlueprintOptionsFlowHandler(config_entries.OptionsFlow):
-    """Blueprint config flow options handler."""
+# class BlueprintOptionsFlowHandler(config_entries.OptionsFlow):
+#     """Blueprint config flow options handler."""
 
-    def __init__(self, config_entry):
-        """Initialize HACS options flow."""
-        self.config_entry = config_entry
-        self.options = dict(config_entry.options)
+#     def __init__(self, config_entry):
+#         """Initialize HACS options flow."""
+#         self.config_entry = config_entry
+#         self.options = dict(config_entry.options)
 
-    async def async_step_init(self, user_input=None):  # pylint: disable=unused-argument
-        """Manage the options."""
-        return await self.async_step_user()
+#     async def async_step_init(self, user_input=None):  # pylint: disable=unused-argument
+#         """Manage the options."""
+#         return await self.async_step_user()
 
-    async def async_step_user(self, user_input=None):
-        """Handle a flow initialized by the user."""
-        if user_input is not None:
-            self.options.update(user_input)
-            return await self._update_options()
+#     async def async_step_user(self, user_input=None):
+#         """Handle a flow initialized by the user."""
+#         if user_input is not None:
+#             self.options.update(user_input)
+#             return await self._update_options()
 
-        return self.async_show_form(
-            step_id="user",
-            data_schema = vol.Schema(
-                {
-                    vol.Optional(
-                        CONF_INDLUDE_PROXY,
-                        default=self.config_entry.options.get(
-                            CONF_INDLUDE_PROXY, DEFAULT_INDLUDE_PROXY
-                        ),
-                    ): bool,
-                    vol.Optional(
-                        CONF_INCLUDE_REDIR,
-                        default=self.config_entry.options.get(
-                            CONF_INCLUDE_REDIR, DEFAULT_INCLUDE_REDIR
-                        ),
-                    ): bool,
-                    vol.Optional(
-                        CONF_INCLUDE_STREAMS,
-                        default=self.config_entry.options.get(
-                            CONF_INCLUDE_STREAMS, DEFAULT_INCLUDE_STREAMS
-                        ),
-                    ): bool,
-                    vol.Optional(
-                        CONF_INCLUDE_DEAD,
-                        default=self.config_entry.options.get(
-                            CONF_INCLUDE_DEAD, DEFAULT_INCLUDE_DEAD
-                        ),
-                    ): bool,
-                    vol.Optional(
-                        CONF_INCLUDE_SENSORS,
-                        default=self.config_entry.options.get(
-                            CONF_INCLUDE_SENSORS, DEFAULT_INCLUDE_SENSORS
-                        ),
-                    ): bool,
-                }
-            )
-        )
+#         return self.async_show_form(
+#             step_id="user",
+#             data_schema = vol.Schema(
+#                 {
+#                     vol.Optional(CONF_INDLUDE_PROXY,default=self.config_entry.options.get(CONF_INDLUDE_PROXY, DEFAULT_INDLUDE_PROXY),): bool,
+#                     vol.Optional(
+#                         CONF_INCLUDE_REDIR,
+#                         default=self.config_entry.options.get(
+#                             CONF_INCLUDE_REDIR, DEFAULT_INCLUDE_REDIR
+#                         ),
+#                     ): bool,
+#                     vol.Optional(
+#                         CONF_INCLUDE_STREAMS,
+#                         default=self.config_entry.options.get(
+#                             CONF_INCLUDE_STREAMS, DEFAULT_INCLUDE_STREAMS
+#                         ),
+#                     ): bool,
+#                     vol.Optional(
+#                         CONF_INCLUDE_DEAD,
+#                         default=self.config_entry.options.get(
+#                             CONF_INCLUDE_DEAD, DEFAULT_INCLUDE_DEAD
+#                         ),
+#                     ): bool,
+#                     vol.Optional(
+#                         CONF_INCLUDE_SENSORS,
+#                         default=self.config_entry.options.get(
+#                             CONF_INCLUDE_SENSORS, DEFAULT_INCLUDE_SENSORS
+#                         ),
+#                     ): bool,
+#                 }
+#             )
+#         )
 
-    async def _update_options(self):
-        """Update config entry options."""
-        return self.async_create_entry(
-            title=self.config_entry.data.get(CONF_USERNAME), data=self.options
-        )
+#     async def _update_options(self):
+#         """Update config entry options."""
+#         return self.async_create_entry(
+#             title=self.config_entry.data.get(CONF_USERNAME), data=self.options
+#         )
