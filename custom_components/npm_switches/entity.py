@@ -11,7 +11,7 @@ class NpmSwitchesEntity(CoordinatorEntity):
     def __init__(self, coordinator, config_entry):
         super().__init__(coordinator)
         self.config_entry = config_entry
-        self.proxy_id = None
+        self.host_id = None
         self.friendly_name = None
         self.coordinator = coordinator
 
@@ -24,7 +24,7 @@ class NpmSwitchesEntity(CoordinatorEntity):
     def device_info(self):
         return {
             "identifiers": {(DOMAIN, self.config_entry.entry_id)},
-            "name": NAME,
+            "name": self.config_entry.title,
             "model": VERSION,
             "manufacturer": NAME,
         }
