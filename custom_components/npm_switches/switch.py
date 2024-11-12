@@ -20,11 +20,18 @@ async def async_setup_entry(hass, entry, async_add_entities):
     redir_hosts = await api.get_redirection_hosts()
     entities = []
 
-    for proxy in proxy_hosts.values():
-        entities.append(NpmProxyBinarySwitch(coordinator, entry, proxy))
-
-    for redir in redir_hosts.values():
-        entities.append(NpmRedirBinarySwitch(coordinator, entry, redir))
+    if entry.data["include_proxy_hosts"]:
+        for proxy in proxy_hosts.values():
+            entities.append(NpmProxyBinarySwitch(coordinator, entry, proxy))
+    if entry.data["include_redirection_hosts"]:
+        for redir in redir_hosts.values():
+            entities.append(NpmRedirBinarySwitch(coordinator, entry, redir))
+    # if entry.data["include_stream_hosts"]:
+    #     for stream in stream_hosts.values():
+    #         entities.append(NpmRedirBinarySwitch(coordinator, entry, stream))
+    # if entry.data["include_dead_hosts"]:
+    #     for dead in dead_hosts.values():
+    #         entities.append(NpmRedirBinarySwitch(coordinator, entry, dead))
 
     async_add_entities(entities, True)
     # async_add_devices([NpmProxyBinarySwitch(coordinator, entry, "20")])

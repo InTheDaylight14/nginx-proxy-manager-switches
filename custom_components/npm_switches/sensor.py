@@ -11,10 +11,19 @@ async def async_setup_entry(hass, entry, async_add_entities):
     """Setup sensor platform."""
     coordinator = hass.data[DOMAIN][entry.entry_id]
     entities = []
-    entities.append(NpmSwitchesProxySensor(coordinator, entry, "enabled"))
-    entities.append(NpmSwitchesProxySensor(coordinator, entry, "disabled"))
-    entities.append(NpmSwitchesRedirSensor(coordinator, entry, "enabled"))
-    entities.append(NpmSwitchesRedirSensor(coordinator, entry, "disabled"))
+    if entry.data["include_enable_disable_count_sensors"]:
+        if entry.data["include_proxy_hosts"]:
+            entities.append(NpmSwitchesProxySensor(coordinator, entry, "enabled"))
+            entities.append(NpmSwitchesProxySensor(coordinator, entry, "disabled"))
+        if entry.data["include_redirection_hosts"]:
+            entities.append(NpmSwitchesRedirSensor(coordinator, entry, "enabled"))
+            entities.append(NpmSwitchesRedirSensor(coordinator, entry, "disabled"))
+        # if entry.data["include_stream_hosts"]:
+        #     entities.append(NpmSwitchesStreamSensor(coordinator, entry, "enabled"))
+        #     entities.append(NpmSwitchesStreamSensor(coordinator, entry, "disabled"))
+        # if entry.data["include_dead_hosts"]:
+        #     entities.append(NpmSwitchesDeadSensor(coordinator, entry, "enabled"))
+        #     entities.append(NpmSwitchesDeadSensor(coordinator, entry, "disabled"))
 
     async_add_entities(entities, True)
 
