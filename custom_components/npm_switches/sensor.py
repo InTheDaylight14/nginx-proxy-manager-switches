@@ -1,6 +1,7 @@
 """Sensor platform for NPM Switches."""
 from homeassistant.components.sensor import SensorEntity
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.util import slugify
 
 from .const import DOMAIN
 from .entity import NpmSwitchesEntity
@@ -39,14 +40,11 @@ class NpmSwitchesProxySensor(NpmSwitchesEntity, SensorEntity):
     ) -> None:
         """Initialize proxy switch entity."""
         super().__init__(coordinator, entry)
-        self.proxy_id = name  # Unique ID relies on self.proxy_id
-        self.sensor_name = self.proxy_id
-        self.friendly_name = "NPM " + self.sensor_name.capitalize() + " Proxy Hosts"
-
-    # @property
-    # def name(self):
-    #     """Return the name of the sensor."""
-    #     return "npm_" + self.sensor_name + "_proxy_hosts"
+        self.host_id = name
+        self.sensor_name = self.host_id
+        self.name = "Proxy Hosts " + self.sensor_name.capitalize()
+        self.entity_id = "sensor."+slugify(f"{entry.title} {self.name}")
+        self._attr_unique_id = f"{entry.entry_id} {self.name}"
 
     @property
     def native_value(self):
@@ -71,14 +69,11 @@ class NpmSwitchesRedirSensor(NpmSwitchesEntity, SensorEntity):
     ) -> None:
         """Initialize proxy switch entity."""
         super().__init__(coordinator, entry)
-        self.host_id = name  # Unique ID relies on self.host_id
+        self.host_id = name
         self.sensor_name = self.host_id
-        self.friendly_name = "NPM Redirection Hosts " + self.sensor_name.capitalize()
-
-    # @property
-    # def name(self):
-    #     """Return the name of the sensor."""
-    #     return "npm_" + self.sensor_name + "_proxy_hosts"
+        self.name = "Redirection Hosts " + self.sensor_name.capitalize()
+        self.entity_id = "sensor." + slugify(f"{entry.title} {self.name}")
+        self._attr_unique_id = f"{entry.entry_id} {self.name}"
 
     @property
     def native_value(self):
@@ -103,14 +98,11 @@ class NpmSwitchesStreamSensor(NpmSwitchesEntity, SensorEntity):
     ) -> None:
         """Initialize proxy switch entity."""
         super().__init__(coordinator, entry)
-        self.host_id = name  # Unique ID relies on self.host_id
+        self.host_id = name
         self.sensor_name = self.host_id
-        self.friendly_name = "NPM Steam Hosts " + self.sensor_name.capitalize()
-
-    # @property
-    # def name(self):
-    #     """Return the name of the sensor."""
-    #     return "npm_" + self.sensor_name + "_proxy_hosts"
+        self.name = "Stream Hosts " + self.sensor_name.capitalize()
+        self.entity_id = "sensor."+slugify(f"{entry.title} {self.name}")
+        self._attr_unique_id = f"{entry.entry_id} {self.name}"
 
     @property
     def native_value(self):
@@ -135,14 +127,11 @@ class NpmSwitchesDeadSensor(NpmSwitchesEntity, SensorEntity):
     ) -> None:
         """Initialize proxy switch entity."""
         super().__init__(coordinator, entry)
-        self.host_id = name  # Unique ID relies on self.host_id
+        self.host_id = name
         self.sensor_name = self.host_id
-        self.friendly_name = "NPM Dead Hosts " + self.sensor_name.capitalize()
-
-    # @property
-    # def name(self):
-    #     """Return the name of the sensor."""
-    #     return "npm_" + self.sensor_name + "_proxy_hosts"
+        self.name = "404 Hosts " + self.sensor_name.capitalize()
+        self.entity_id = "sensor."+slugify(f"{entry.title} {self.name}")
+        self._attr_unique_id = f"{entry.entry_id} {self.name}"
 
     @property
     def native_value(self):

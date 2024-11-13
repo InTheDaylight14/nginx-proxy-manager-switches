@@ -1,6 +1,7 @@
 """Switch platform for integration_blueprint."""
 import logging
-from homeassistant.components.switch import SwitchEntity
+from homeassistant.components.switch import SwitchEntity, SwitchEntityDescription
+from homeassistant.util import slugify
 
 # from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntry
@@ -51,11 +52,11 @@ class NpmProxyBinarySwitch(NpmSwitchesEntity, SwitchEntity):
         """Initialize proxy switch entity."""
         super().__init__(coordinator, entry)
         self.host = host
+        self.name = "Proxy " + self.host["domain_names"][0].replace(".", " ").capitalize()
+        self.entity_id = "switch."+slugify(f"{entry.title} {self.name}")
+        self._attr_unique_id = f"{entry.entry_id} {self.name}"
         self.host_id = str(host["id"])
         self.host_type = "proxy-hosts"
-        self.friendly_name = (
-            "NPM Proxy " + self.host["domain_names"][0].replace(".", " ").capitalize()
-        )
 
     async def async_turn_on(self, **kwargs):  # pylint: disable=unused-argument
         """Turn on the switch."""
@@ -106,11 +107,11 @@ class NpmRedirBinarySwitch(NpmSwitchesEntity, SwitchEntity):
         """Initialize redir switch entity."""
         super().__init__(coordinator, entry)
         self.host = host
+        self.name = "Redirect " + self.host["domain_names"][0].replace(".", " ").capitalize()
+        self.entity_id = "switch."+slugify(f"{entry.title} {self.name}")
+        self._attr_unique_id = f"{entry.entry_id} {self.name}"
         self.host_type = "redirection-hosts"
         self.host_id = str(host["id"])
-        self.friendly_name = (
-            "NPM Redir " + self.host["domain_names"][0].replace(".", " ").capitalize()
-        )
 
     async def async_turn_on(self, **kwargs):  # pylint: disable=unused-argument
         """Turn on the switch."""
@@ -123,11 +124,6 @@ class NpmRedirBinarySwitch(NpmSwitchesEntity, SwitchEntity):
         await self.coordinator.api.disable_host(self.host_id, self.host_type)
         self.async_write_ha_state()
         self.host = await self.coordinator.api.get_host(self.host_id, self.host_type)
-
-    # @property
-    # def name(self):
-    #     """Return the name of the switch."""
-    #     return "NPM " + self.host["domain_names"][0].replace(".", " ").capitalize()
 
     @property
     def icon(self):
@@ -162,11 +158,11 @@ class NpmStreamBinarySwitch(NpmSwitchesEntity, SwitchEntity):
         """Initialize steam switch entity."""
         super().__init__(coordinator, entry)
         self.host = host
+        self.name = "Stream " + str(self.host["incoming_port"])
+        self.entity_id = "switch."+slugify(f"{entry.title} {self.name}")
+        self._attr_unique_id = f"{entry.entry_id} {self.name}"
         self.host_type = "streams"
         self.host_id = str(host["id"])
-        self.friendly_name = (
-            "NPM Stream " + str(self.host["incoming_port"])
-        )
 
     async def async_turn_on(self, **kwargs):  # pylint: disable=unused-argument
         """Turn on the switch."""
@@ -179,11 +175,6 @@ class NpmStreamBinarySwitch(NpmSwitchesEntity, SwitchEntity):
         await self.coordinator.api.disable_host(self.host_id, self.host_type)
         self.async_write_ha_state()
         self.host = await self.coordinator.api.get_host(self.host_id, self.host_type)
-
-    # @property
-    # def name(self):
-    #     """Return the name of the switch."""
-    #     return "NPM " + self.host["domain_names"][0].replace(".", " ").capitalize()
 
     @property
     def icon(self):
@@ -219,11 +210,11 @@ class NpmDeadBinarySwitch(NpmSwitchesEntity, SwitchEntity):
         """Initialize redir switch entity."""
         super().__init__(coordinator, entry)
         self.host = host
+        self.name = "404 " + self.host["domain_names"][0].replace(".", " ").capitalize()
+        self.entity_id = "switch."+slugify(f"{entry.title} {self.name}")
+        self._attr_unique_id = f"{entry.entry_id} {self.name}"
         self.host_type = "dead-hosts"
         self.host_id = str(host["id"])
-        self.friendly_name = (
-            "NPM Dead " + self.host["domain_names"][0].replace(".", " ").capitalize()
-        )
 
     async def async_turn_on(self, **kwargs):  # pylint: disable=unused-argument
         """Turn on the switch."""
@@ -236,11 +227,6 @@ class NpmDeadBinarySwitch(NpmSwitchesEntity, SwitchEntity):
         await self.coordinator.api.disable_host(self.host_id, self.host_type)
         self.async_write_ha_state()
         self.host = await self.coordinator.api.get_host(self.host_id, self.host_type)
-
-    # @property
-    # def name(self):
-    #     """Return the name of the switch."""
-    #     return "NPM " + self.host["domain_names"][0].replace(".", " ").capitalize()
 
     @property
     def icon(self):

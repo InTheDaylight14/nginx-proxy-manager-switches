@@ -1,5 +1,6 @@
 """BlueprintEntity class"""
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
+from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.util import slugify
 
 from .const import DOMAIN, NAME, VERSION, ATTRIBUTION
@@ -8,37 +9,18 @@ from .const import DOMAIN, NAME, VERSION, ATTRIBUTION
 class NpmSwitchesEntity(CoordinatorEntity):
     """Init NPM user device."""
 
+    _attr_has_entity_name = True
+
     def __init__(self, coordinator, config_entry):
         super().__init__(coordinator)
+        self.host = None
+        self.name = None
+        self.entity_id = None
         self.config_entry = config_entry
         self.host_id = None
-        self.friendly_name = None
         self.coordinator = coordinator
-
-    @property
-    def unique_id(self):
-        """Return a unique ID to use for this entity."""
-        return slugify(f"{self.config_entry.entry_id} {self.friendly_name}")
-
-    @property
-    def device_info(self):
-        return {
-            "identifiers": {(DOMAIN, self.config_entry.entry_id)},
-            "name": self.config_entry.title,
-            "model": VERSION,
-            "manufacturer": NAME,
-        }
-
-    @property
-    def extra_state_attributes(self):
-        """Return the state attributes."""
-        return {
-            "attribution": ATTRIBUTION,
-            # "id": str(self.coordinator.data.get("id")),
-            "integration": DOMAIN,
-        }
-
-    @property
-    def name(self):
-        """Return the name of the switch."""
-        return self.friendly_name
+        self._attr_unique_id = None
+        self._attr_device_info = DeviceInfo(
+            identifiers={(DOMAIN, self.config_entry.entry_id)},
+            name=self.config_entry.title,
+        )
