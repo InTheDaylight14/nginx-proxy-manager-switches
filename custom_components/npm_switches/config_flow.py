@@ -2,6 +2,7 @@
 from homeassistant import config_entries
 from homeassistant.core import callback
 from homeassistant.helpers.aiohttp_client import async_create_clientsession
+from homeassistant.util import slugify
 import voluptuous as vol
 
 from .api import NpmSwitchesApiClient
@@ -49,6 +50,7 @@ class BlueprintFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         if user_input is not None:
             scheme_end = user_input[CONF_NPM_URL].find("://")+3
             self.clean_npm_url = user_input[CONF_NPM_URL][scheme_end:]
+            user_input["clean_npm_url"] = slugify(f"{self.clean_npm_url}")
 
             # existing_entry = self._async_entry_for_username(user_input[CONF_NPM_URL])
             existing_entry = self._async_entry_for_username(self.clean_npm_url)
