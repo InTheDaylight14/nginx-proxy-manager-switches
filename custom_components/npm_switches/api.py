@@ -177,7 +177,14 @@ class NpmSwitchesApiClient:
         response = await self.api_wrapper("post", url, headers=self._headers)
 
         if response is True:
-            self.proxy_hosts_data[host_id]["enabled"] = 1
+            if host_type is "proxy-hosts":
+                self.proxy_hosts_data[host_id]["enabled"] = 1
+            if host_type is "redirection-hosts":
+                self.redir_hosts_data[host_id]["enabled"] = 1
+            if host_type is "streams":
+                self.stream_hosts_data[host_id]["enabled"] = 1
+            if host_type is "dead-hosts":
+                self.dead_hosts_data[host_id]["enabled"] = 1
         elif "error" in response.keys():
             _LOGGER.error(
                 "Error enabling host type %s host id %s. Error message: '%s'",
@@ -193,7 +200,14 @@ class NpmSwitchesApiClient:
 
         response = await self.api_wrapper("post", url, headers=self._headers)
         if response is True:
-            self.proxy_hosts_data[host_id]["enabled"] = 0
+            if host_type is "proxy-hosts":
+                self.proxy_hosts_data[host_id]["enabled"] = 0
+            if host_type is "redirection-hosts":
+                self.redir_hosts_data[host_id]["enabled"] = 0
+            if host_type is "streams":
+                self.stream_hosts_data[host_id]["enabled"] = 0
+            if host_type is "dead-hosts":
+                self.dead_hosts_data[host_id]["enabled"] = 0
         elif "error" in response.keys():
             _LOGGER.error(
                 "Error enabling host type %s host id %s. Error message: '%s'",
@@ -215,16 +229,16 @@ class NpmSwitchesApiClient:
                 return True
             else:
                 return False
-        # elif host_type == "streams":
-            # if self.stream_hosts_data[host_id]["enabled"] == 1:
-            #     return True
-            # else:
-            #     return False
-        # elif host_type == "dead-hosts":
-            # if self.dead_hosts_data[host_id]["enabled"] == 1:
-            #     return True
-            # else:
-            #     return False
+        elif host_type == "streams":
+            if self.stream_hosts_data[host_id]["enabled"] == 1:
+                return True
+            else:
+                return False
+        elif host_type == "dead-hosts":
+            if self.dead_hosts_data[host_id]["enabled"] == 1:
+                return True
+            else:
+                return False
         else:
             return None
     @property
