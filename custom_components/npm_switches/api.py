@@ -34,10 +34,16 @@ class NpmSwitchesApiClient:
         self._headers = None
         self.proxy_hosts_data = None
         self.redir_hosts_data = None
+        self.stream_hosts_data = None
+        self.dead_hosts_data = None
         self.num_proxy_enabled = 0
         self.num_proxy_disabled = 0
         self.num_redir_enabled = 0
         self.num_redir_disabled = 0
+        self.num_stream_enabled = 0
+        self.num_stream_disabled = 0
+        self.num_dead_enabled = 0
+        self.num_dead_disabled = 0
 
     async def async_get_data(self) -> dict:
         """Get data from the API."""
@@ -69,7 +75,7 @@ class NpmSwitchesApiClient:
         return self.proxy_hosts_data
 
     async def get_redirection_hosts(self) -> list():
-        """Get a list of redirection-hosts."""
+        """Get a list of redirection hosts."""
         self.num_redir_enabled = 0
         self.num_redir_disabled = 0
 
@@ -87,6 +93,44 @@ class NpmSwitchesApiClient:
                 self.num_redir_disabled += 1
         return self.redir_hosts_data
 
+    async def get_stream_hosts(self) -> list():
+        """Get a list of stream hosts."""
+        self.num_stream_enabled = 0
+        self.num_stream_disabled = 0
+
+        if self._token is None:
+            await self.async_get_new_token()
+        url = self._npm_url + "/api/nginx/streams"
+        stream_hosts_list = await self.api_wrapper("get", url, headers=self._headers)
+
+        self.stream_hosts_data = {}
+        for stream in stream_hosts_list:
+            self.stream_hosts_data[str(stream["id"])] = stream
+            if stream["enabled"] == 1:
+                self.num_stream_enabled += 1
+            else:
+                self.num_stream_disabled += 1
+        return self.stream_hosts_data
+
+    async def get_dead_hosts(self) -> list():
+        """Get a list of stream hosts."""
+        self.num_dead_enabled = 0
+        self.num_dead_disabled = 0
+
+        if self._token is None:
+            await self.async_get_new_token()
+        url = self._npm_url + "/api/nginx/dead-hosts"
+        dead_hosts_list = await self.api_wrapper("get", url, headers=self._headers)
+
+        self.dead_hosts_data = {}
+        for dead in dead_hosts_list:
+            self.dead_hosts_data[str(dead["id"])] = dead
+            if dead["enabled"] == 1:
+                self.num_dead_enabled += 1
+            else:
+                self.num_dead_disabled += 1
+        return self.dead_hosts_data
+
     async def get_host(self, host_id: int, host_type: str) -> dict:
         """Get a host by id and type.
         Host Type: proxy-hosts, redirection-hosts, streams, dead-hosts"""
@@ -94,10 +138,10 @@ class NpmSwitchesApiClient:
             return self.proxy_hosts_data[host_id]
         elif host_type == "redirection-hosts":
             return self.redir_hosts_data[host_id]
-        # elif host_type == "streams":
-            # return self.stream_hosts_data[host_id]
-        # elif host_type == "dead-hosts":
-            # return self.dead_hosts_data[host_id]
+        elif host_type == "streams":
+            return self.stream_hosts_data[host_id]
+        elif host_type == "dead-hosts":
+            return self.dead_hosts_data[host_id]
         else:
             return None
 
