@@ -177,13 +177,13 @@ class NpmSwitchesApiClient:
         response = await self.api_wrapper("post", url, headers=self._headers)
 
         if response is True:
-            if host_type is "proxy-hosts":
+            if host_type == "proxy-hosts":
                 self.proxy_hosts_data[host_id]["enabled"] = 1
-            if host_type is "redirection-hosts":
+            if host_type == "redirection-hosts":
                 self.redir_hosts_data[host_id]["enabled"] = 1
-            if host_type is "streams":
+            if host_type == "streams":
                 self.stream_hosts_data[host_id]["enabled"] = 1
-            if host_type is "dead-hosts":
+            if host_type == "dead-hosts":
                 self.dead_hosts_data[host_id]["enabled"] = 1
         elif "error" in response.keys():
             _LOGGER.error(
@@ -200,13 +200,13 @@ class NpmSwitchesApiClient:
 
         response = await self.api_wrapper("post", url, headers=self._headers)
         if response is True:
-            if host_type is "proxy-hosts":
+            if host_type == "proxy-hosts":
                 self.proxy_hosts_data[host_id]["enabled"] = 0
-            if host_type is "redirection-hosts":
+            if host_type == "redirection-hosts":
                 self.redir_hosts_data[host_id]["enabled"] = 0
-            if host_type is "streams":
+            if host_type == "streams":
                 self.stream_hosts_data[host_id]["enabled"] = 0
-            if host_type is "dead-hosts":
+            if host_type == "dead-hosts":
                 self.dead_hosts_data[host_id]["enabled"] = 0
         elif "error" in response.keys():
             _LOGGER.error(
