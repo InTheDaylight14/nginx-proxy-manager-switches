@@ -8,5 +8,6 @@
   "documentation": "https://github.com/InTheDaylight14/nginx-proxy-manager-switches",
   "iot_class": "local_polling",
   "issue_tracker": "https://github.com/InTheDaylight14/nginx-proxy-manager-switches/issues",
-  "version": "2.0.0"
+  "version": "2.0.2",
+  "homeassistant": "2024.1.1"
 }
