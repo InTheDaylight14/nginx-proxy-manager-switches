@@ -1,4 +1,4 @@
-"""BlueprintEntity class"""
+"""NPM Switches Entity class"""
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.util import slugify

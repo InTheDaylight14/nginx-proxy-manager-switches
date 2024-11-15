@@ -1,4 +1,4 @@
-"""Switch platform for integration_blueprint."""
+"""Switch platform for npm_switches."""
 import logging
 from homeassistant.components.switch import SwitchEntity, SwitchEntityDescription
 from homeassistant.util import slugify

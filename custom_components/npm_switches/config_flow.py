@@ -28,8 +28,8 @@ from .const import (
 )
 
 
-class BlueprintFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
-    """Config flow for Blueprint."""
+class NPMSwitchesFloHandler(config_entries.ConfigFlow, domain=DOMAIN):
+    """Config flow for NPM Switches."""
 
     VERSION = 1
     CONNECTION_CLASS = config_entries.CONN_CLASS_CLOUD_POLL

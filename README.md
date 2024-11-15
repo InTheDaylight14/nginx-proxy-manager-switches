@@ -1,12 +1,11 @@
 # NPM Switches Custom Integration
 
 [![GitHub Release][releases-shield]][releases]
-![GitHub all releases][download-all]
-![GitHub release (latest by SemVer)][download-latest]
+<!-- ![GitHub all releases][download-all] -->
+<!-- ![GitHub release (latest by SemVer)][download-latest] -->
 [![GitHub Activity][commits-shield]][commits]
 
 [![License][license-shield]][license]
-
 [![hacs][hacsbadge]][hacs]
 ![Project Maintenance][maintenance-shield]
 [![Community Forum][forum-shield]][forum]
