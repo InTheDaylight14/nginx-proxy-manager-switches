@@ -164,7 +164,7 @@ class NpmSwitchesCertSensor(NpmSwitchesEntity, SensorEntity):
         """Initialize Cert expire sensor entity."""
         super().__init__(coordinator, entry)
         self.cert_id = str(certificate["id"])
-        self.name = "Certification " + certificate["nice_name"]
+        self.name = "Certification " + certificate["domain_names"][0]
         self.entity_id = "sensor."+slugify(f"{entry.title}")+" Cert "+str(self.cert_id)
         self._attr_unique_id = f"{entry.entry_id} {" Cert "} {self.cert_id}"
         self._attr_device_class = SensorDeviceClass.TIMESTAMP
@@ -184,3 +184,16 @@ class NpmSwitchesCertSensor(NpmSwitchesEntity, SensorEntity):
     def icon(self):
         """Return the icon of the sensor."""
         return "mdi:lock-clock"
+
+    @property
+    def extra_state_attributes(self):
+        """Return device state attributes."""
+        certificate = self.coordinator.api.get_certificate(self.cert_id)
+
+        return {
+            "id": certificate["id"],
+            "provider": certificate["provider"],
+            "domain_names": certificate["domain_names"],
+            "created_on": certificate["created_on"],
+            "modified_on": certificate["modified_on"],
+        }
