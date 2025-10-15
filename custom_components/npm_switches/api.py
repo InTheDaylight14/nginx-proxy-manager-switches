@@ -36,6 +36,7 @@ class NpmSwitchesApiClient:
         self.redir_hosts_data = None
         self.stream_hosts_data = None
         self.dead_hosts_data = None
+        self.certificates_data = None
         self.num_proxy_enabled = 0
         self.num_proxy_disabled = 0
         self.num_redir_enabled = 0
@@ -241,6 +242,25 @@ class NpmSwitchesApiClient:
                 return False
         else:
             return None
+
+    async def get_certificates(self) -> list():
+        """Get a list of cirtificates."""
+
+        if self._token is None:
+            await self.async_get_new_token()
+        url = self._npm_url + "/api/nginx/certificates"
+        certificate_list = await self.api_wrapper("get", url, headers=self._headers)
+
+        self.certificates_data = {}
+        for cert in certificate_list:
+            self.certificates_data[str(cert["id"])] = cert
+
+        return self.certificates_data
+
+    def get_certificate(self, certificate_id: int) -> dict:
+        """Get a single certificate"""
+        return self.certificates_data[certificate_id]
+
     @property
     def get_num_proxy_enabled(self) -> int:
         """Return the num enabled proxy hosts."""
