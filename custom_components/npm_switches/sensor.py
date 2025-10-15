@@ -1,7 +1,9 @@
 """Sensor platform for NPM Switches."""
-from homeassistant.components.sensor import SensorEntity
+from datetime import datetime
+
+from homeassistant.components.sensor import SensorEntity, SensorDeviceClass
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.util import slugify
+from homeassistant.util import slugify, dt
 
 from .const import DOMAIN
 from .entity import NpmSwitchesEntity
@@ -11,6 +13,8 @@ from . import NpmSwitchesUpdateCoordinator
 async def async_setup_entry(hass, entry, async_add_entities):
     """Setup sensor platform."""
     coordinator = hass.data[DOMAIN][entry.entry_id]
+    api = hass.data[DOMAIN][entry.entry_id].api
+    certificates = await api.get_certificates()
     entities = []
     if entry.data["include_enable_disable_count_sensors"]:
         if entry.data["include_proxy_hosts"]:
@@ -25,6 +29,9 @@ async def async_setup_entry(hass, entry, async_add_entities):
         if entry.data["include_dead_hosts"]:
             entities.append(NpmSwitchesDeadSensor(coordinator, entry, "enabled"))
             entities.append(NpmSwitchesDeadSensor(coordinator, entry, "disabled"))
+
+    for cert in certificates.values():
+        entities.append(NpmSwitchesCertSensor(coordinator, entry, cert))
 
     async_add_entities(entities, True)
 
@@ -117,7 +124,7 @@ class NpmSwitchesStreamSensor(NpmSwitchesEntity, SensorEntity):
         return "mdi:counter"
 
 class NpmSwitchesDeadSensor(NpmSwitchesEntity, SensorEntity):
-    """NPM Switches Deam Sensor class."""
+    """NPM Switches Dead Sensor class."""
 
     def __init__(
         self,
@@ -144,3 +151,36 @@ class NpmSwitchesDeadSensor(NpmSwitchesEntity, SensorEntity):
     def icon(self):
         """Return the icon of the sensor."""
         return "mdi:counter"
+
+class NpmSwitchesCertSensor(NpmSwitchesEntity, SensorEntity):
+    """NPM Switches Cert Sensor class."""
+
+    def __init__(
+        self,
+        coordinator: NpmSwitchesUpdateCoordinator,
+        entry: ConfigEntry,
+        certificate: dict,
+    ) -> None:
+        """Initialize Cert expire sensor entity."""
+        super().__init__(coordinator, entry)
+        self.cert_id = str(certificate["id"])
+        self.name = "Certification " + certificate["nice_name"]
+        self.entity_id = "sensor."+slugify(f"{entry.title}")+" Cert "+str(self.cert_id)
+        self._attr_unique_id = f"{entry.entry_id} {" Cert "} {self.cert_id}"
+        self._attr_device_class = SensorDeviceClass.TIMESTAMP
+        self._expires_on: Optional[datetime] = None
+
+    @property
+    def native_value(self):
+        """Return the native value of the sensor."""
+
+        certificate = self.coordinator.api.get_certificate(self.cert_id)
+        local_expiration = dt.parse_datetime(certificate["expires_on"])
+        self._expires_on = dt.as_utc(local_expiration)
+
+        return self._expires_on
+
+    @property
+    def icon(self):
+        """Return the icon of the sensor."""
+        return "mdi:lock-clock"
