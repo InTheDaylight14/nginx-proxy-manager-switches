@@ -261,6 +261,21 @@ class NpmSwitchesApiClient:
         """Get a single certificate"""
         return self.certificates_data[certificate_id]
 
+    async def renew_certificate(self, certificate_id: int) -> None:
+        """Renew the passed certificate"""
+        url = self._npm_url + "/api/nginx/certificates/" + str(certificate_id) + "/renew"
+        response = await self.api_wrapper("post", url, headers=self._headers)
+
+        if response is True:
+           await self.get_certificates()
+        elif "error" in response.keys():
+            _LOGGER.error(
+                "Error enabling host type %s host id %s. Error message: '%s'",
+                host_type,
+                host_id,
+                response["error"]["message"],
+            )
+
     @property
     def get_num_proxy_enabled(self) -> int:
         """Return the num enabled proxy hosts."""
