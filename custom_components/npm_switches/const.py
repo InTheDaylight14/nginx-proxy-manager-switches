@@ -17,7 +17,8 @@ BINARY_SENSOR_DEVICE_CLASS = "connectivity"
 # BINARY_SENSOR = "binary_sensor"
 SENSOR = "sensor"
 SWITCH = "switch"
-PLATFORMS = [SENSOR, SWITCH]
+BUTTON = 'button'
+PLATFORMS = [SENSOR, SWITCH, BUTTON]
 
 
 # Configuration and options
