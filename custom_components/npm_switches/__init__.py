@@ -24,7 +24,12 @@ from .const import (
     DOMAIN,
     PLATFORMS,
     STARTUP_MESSAGE,
-    CONF_INCLUDE_CERTS,
+    CONF_INDLUDE_PROXY,
+    CONF_INCLUDE_REDIR,
+    CONF_INCLUDE_STREAMS,
+    CONF_INCLUDE_DEAD,
+    CONF_INCLUDE_SENSORS,
+    CONF_INCLUDE_CERTS
 )
 
 SCAN_INTERVAL = timedelta(seconds=60)
@@ -81,14 +86,31 @@ class NpmSwitchesUpdateCoordinator(DataUpdateCoordinator):
 
     async def _async_update_data(self):
         """Update data via library."""
-        try:
-            await self.api.get_proxy_hosts()
-        except Exception as exception:
-            raise UpdateFailed() from exception
-        try:
-            await self.api.get_redirection_hosts()
-        except Exception as exception:
-            raise UpdateFailed() from exception
+
+        if self.entry.data.get(CONF_INDLUDE_PROXY):
+            try:
+                await self.api.get_proxy_hosts()
+            except Exception as exception:
+                raise UpdateFailed() from exception
+
+        if self.entry.data.get(CONF_INCLUDE_REDIR):
+            try:
+                await self.api.get_redirection_hosts()
+            except Exception as exception:
+                raise UpdateFailed() from exception
+
+        if self.entry.data.get(CONF_INCLUDE_STREAMS):
+            try:
+                await self.api.get_stream_hosts()
+            except Exception as exception:
+                raise UpdateFailed() from exception
+
+        if self.entry.data.get(CONF_INCLUDE_DEAD):
+            try:
+                await self.api.get_dead_hosts()
+            except Exception as exception:
+                raise UpdateFailed() from exception
+
         if self.entry.data.get(CONF_INCLUDE_CERTS):
             await self.api.get_certificates()
 
