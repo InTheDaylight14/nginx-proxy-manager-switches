@@ -24,6 +24,7 @@ from .const import (
     DOMAIN,
     PLATFORMS,
     STARTUP_MESSAGE,
+    CONF_INCLUDE_CERTS,
 )
 
 SCAN_INTERVAL = timedelta(seconds=60)
@@ -49,7 +50,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     session = async_get_clientsession(hass)
     client = NpmSwitchesApiClient(username, password, npm_url, session)
 
-    coordinator = NpmSwitchesUpdateCoordinator(hass, client=client)
+    coordinator = NpmSwitchesUpdateCoordinator(hass, client=client, entry=entry)
     await coordinator.async_refresh()
 
     if not coordinator.last_update_success:
@@ -70,10 +71,11 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
 class NpmSwitchesUpdateCoordinator(DataUpdateCoordinator):
     """Class to manage fetching data from the API."""
 
-    def __init__(self, hass: HomeAssistant, client: NpmSwitchesApiClient) -> None:
+    def __init__(self, hass: HomeAssistant, client: NpmSwitchesApiClient, entry: ConfigEntry) -> None:
         """Initialize."""
         self.api = client
         self.platforms = []
+        self.entry = entry
 
         super().__init__(hass, _LOGGER, name=DOMAIN, update_interval=SCAN_INTERVAL)
 
@@ -87,6 +89,8 @@ class NpmSwitchesUpdateCoordinator(DataUpdateCoordinator):
             await self.api.get_redirection_hosts()
         except Exception as exception:
             raise UpdateFailed() from exception
+        if self.entry.data.get(CONF_INCLUDE_CERTS):
+            await self.api.get_certificates()
 
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
