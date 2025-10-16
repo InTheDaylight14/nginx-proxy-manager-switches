@@ -31,6 +31,7 @@ CONF_INCLUDE_REDIR = "include_redirection_hosts"
 CONF_INCLUDE_STREAMS = "include_stream_hosts"
 CONF_INCLUDE_DEAD = "include_dead_hosts"
 CONF_INCLUDE_SENSORS = "include_enable_disable_count_sensors"
+CONF_INCLUDE_CERTS = "include_certificate_sensors"
 DEFAULT_ENABLED = ""
 DEFAULT_USERNAME = ""
 DEFAULT_PASSWORD = ""
@@ -40,6 +41,7 @@ DEFAULT_INCLUDE_REDIR = False
 DEFAULT_INCLUDE_STREAMS = False
 DEFAULT_INCLUDE_DEAD = False
 DEFAULT_INCLUDE_SENSORS = True
+DEFAULT_INCLUDE_CERTS = False
 
 # Defaults
 DEFAULT_NAME = DOMAIN

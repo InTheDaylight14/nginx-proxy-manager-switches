@@ -17,6 +17,7 @@ from .const import (
     CONF_INCLUDE_STREAMS,
     CONF_INCLUDE_DEAD,
     CONF_INCLUDE_SENSORS,
+    CONF_INCLUDE_CERTS,
     DEFAULT_USERNAME,
     DEFAULT_PASSWORD,
     DEFAULT_NPM_URL,
@@ -25,6 +26,7 @@ from .const import (
     DEFAULT_INCLUDE_STREAMS,
     DEFAULT_INCLUDE_DEAD,
     DEFAULT_INCLUDE_SENSORS,
+    DEFAULT_INCLUDE_CERTS,
 )
 
 
@@ -99,7 +101,8 @@ class NPMSwitchesFloHandler(config_entries.ConfigFlow, domain=DOMAIN):
                     vol.Optional(CONF_INDLUDE_PROXY,default=DEFAULT_INDLUDE_PROXY): bool,
                     vol.Optional(CONF_INCLUDE_REDIR,default=DEFAULT_INCLUDE_REDIR): bool,
                     vol.Optional(CONF_INCLUDE_STREAMS,default=DEFAULT_INCLUDE_STREAMS): bool,
-                    vol.Optional(CONF_INCLUDE_DEAD,default=DEFAULT_INCLUDE_DEAD): bool
+                    vol.Optional(CONF_INCLUDE_DEAD,default=DEFAULT_INCLUDE_DEAD): bool,
+                    vol.Optional(CONF_INCLUDE_CERTS,default=DEFAULT_INCLUDE_CERTS): bool
                 }
             ),
             errors=self._errors,
