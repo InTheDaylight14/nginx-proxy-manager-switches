@@ -12,7 +12,8 @@
                     "include_redirection_hosts": "Include Redirection Hosts",
                     "include_stream_hosts": "Include Stream Hosts",
                     "include_dead_hosts": "Include Dead Hosts",
-                    "include_enable_disable_count_sensors": "Include Enabled/Disabled Count Sensors"
+                    "include_enable_disable_count_sensors": "Include Enabled/Disabled Count Sensors",
+                    "include_certificate_sensors": "Include Certificate Sensors and Buttons"
                 }
             }
         },

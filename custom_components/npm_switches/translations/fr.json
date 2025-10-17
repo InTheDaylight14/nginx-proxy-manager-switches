@@ -12,7 +12,8 @@
                     "include_redirection_hosts": "Inclure les hôtes de redirection",
                     "include_stream_hosts": "Inclure les hôtes de flux",
                     "include_dead_hosts": "Inclure les hôtes morts",
-                    "include_enable_disable_count_sensors": "Inclure les capteurs de comptage activés/désactivés"
+                    "include_enable_disable_count_sensors": "Inclure les capteurs de comptage activés/désactivés",
+                    "include_certificate_sensors": "Inclure des capteurs et des boutons de certificat"
                 }
             }
         },
