@@ -14,7 +14,7 @@
 
 ## Installation
 
-### Recomended via HACs
+### Recommended via HACs
 
 1. Use [HACS](https://hacs.xyz/docs/setup/download), in `HACS > Integrations > Explore & Add Repositories` search for "NPM Switches".
 2. Restart Home Assistant.
@@ -24,19 +24,25 @@
 1. Use the tool of choice to open the directory (folder) for your HA configuration (where you find `configuration.yaml`).
 3. If you do not have a `custom_components` directory (folder) there, you need to create it.
 4. Download this repository's files.
-5. Move or Copy the the entire `npm_switches/` directory (folder) in your HA `custom_components` directory (folder). End result should look like `custom_components/npm_switches/`.
+5. Move or Copy the entire `npm_switches/` directory (folder) in your HA `custom_components` directory (folder). End result should look like `custom_components/npm_switches/`.
 6. Restart Home Assistant.
 7. [![Add Integration][add-integration-badge]][add-integration] or in the HA UI go to "Configuration" -> "Integrations" click "+" and search for "NPM Switches".
 
 ## Usage
 
-'NPM Switches' offers integration with a local Nginx Proxy Manager server/instance. It will login into and retrieve a token from the NPM server every 24 hours. This token is used to querry the state of each proxy host every 60 seconds. It is also used to enable or disable a proxy host via local api call to the NPM server.
+'NPM Switches' offers integration with a local Nginx Proxy Manager server/instance. It will login into and retrieve a token from the NPM server every 24 hours. This token is used to query the state of each proxy host every 60 seconds. It is also used to enable or disable a proxy host via local api call to the NPM server.
 
 This integration provides the following entities:
 - Switches - One switch for every proxy host that is configured
-- Sensors - Number of enabled proxy hosts, number of disabled proxy hosts
+    - Optional Switches: Redirection Hosts, Streams, 404 Hosts
+- Sensors:
+    - Number of enabled and disabled proxy hosts (and, if enabled  during configuration, redirection, stream, and dead hosts)
+- Buttons:
+    - Renew certificate buttons
 
-Future features could include redirection host switches and 404 host switches.
+Features to be developed:
+- Truly unique Unique IDs
+- Reconfiguration of an entry should the NPM url or login info change
 
 If you want to contribute to this please read the [Contribution guidelines](CONTRIBUTING.md)
 
