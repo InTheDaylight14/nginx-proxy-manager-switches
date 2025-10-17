@@ -270,9 +270,7 @@ class NpmSwitchesApiClient:
            await self.get_certificates()
         elif "error" in response.keys():
             _LOGGER.error(
-                "Error enabling host type %s host id %s. Error message: '%s'",
-                host_type,
-                host_id,
+                "Error renewing certificate. Error message: '%s'",
                 response["error"]["message"],
             )
 
