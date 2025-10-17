@@ -36,13 +36,14 @@ This integration provides the following entities:
 - Switches - One switch for every proxy host that is configured
     - Optional Switches: Redirection Hosts, Streams, 404 Hosts
 - Sensors:
-    - Number of enabled and disabled proxy hosts (and, if enabled  during configuration, redirection, stream, and dead hosts)
+    - Number of enabled and disabled proxy hosts (and, if enabled  during configuration, redirection, stream, and 404 hosts)
 - Buttons:
     - Renew certificate buttons
 
 Features to be developed:
 - Truly unique Unique IDs
 - Reconfiguration of an entry should the NPM url or login info change
+- Better error messages on failed configuration
 
 If you want to contribute to this please read the [Contribution guidelines](CONTRIBUTING.md)
 

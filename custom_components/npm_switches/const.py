@@ -3,8 +3,8 @@
 NAME = "NPM Switches"
 DOMAIN = "npm_switches"
 DOMAIN_DATA = f"{DOMAIN}_data"
-VERSION = "1.1.0"
-ATTRIBUTION = "Data provided by http://jsonplaceholder.typicode.com/"
+VERSION = "2.1.0"
+ATTRIBUTION = "Data provided by your NPM Instance"
 ISSUE_URL = "https://github.com/InTheDaylight14/nginx-proxy-manager-switches/issues"
 
 # Icons
