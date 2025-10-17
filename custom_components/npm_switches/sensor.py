@@ -30,9 +30,10 @@ async def async_setup_entry(hass, entry, async_add_entities):
             entities.append(NpmSwitchesDeadSensor(coordinator, entry, "enabled"))
             entities.append(NpmSwitchesDeadSensor(coordinator, entry, "disabled"))
 
-    if entry.data["include_certificate_sensors"]:
-        for cert in certificates.values():
-            entities.append(NpmSwitchesCertSensor(coordinator, entry, cert))
+    if "include_certificate_sensors" in entry.data:
+        if entry.data["include_certificate_sensors"]:
+            for cert in certificates.values():
+                entities.append(NpmSwitchesCertSensor(coordinator, entry, cert))
 
     async_add_entities(entities, True)
 
