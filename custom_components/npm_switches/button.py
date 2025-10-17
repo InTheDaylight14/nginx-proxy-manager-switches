@@ -17,8 +17,10 @@ async def async_setup_entry(hass, entry, async_add_entities):
     certificates = await api.get_certificates()
     entities = []
 
-    for cert in certificates.values():
-        entities.append(NpmSwitchesCertificateRenewButton(coordinator, entry, cert))
+    if "include_certificate_sensors" in entry.data:
+        if entry.data["include_certificate_sensors"]:
+            for cert in certificates.values():
+                entities.append(NpmSwitchesCertificateRenewButton(coordinator, entry, cert))
 
     async_add_entities(entities, True)
 
