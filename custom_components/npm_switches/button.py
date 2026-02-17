@@ -37,8 +37,8 @@ class NpmSwitchesCertificateRenewButton(NpmSwitchesEntity, ButtonEntity):
         super().__init__(coordinator, entry)
         self.cert_id = str(certificate["id"])
         self.name = "Renew Certificate " + certificate["domain_names"][0]
-        self.entity_id = "button."+slugify(f"{entry.title}")+" Renew Cert "+str(self.cert_id)
-        self._attr_unique_id = f"{entry.entry_id} {" Renew Cert "} {self.cert_id}"
+        self.entity_id = "button."+slugify(f"{entry.title}")+"_renew_cert_"+str(self.cert_id)
+        self._attr_unique_id = f"{entry.entry_id} {"_renew_cert_"} {self.cert_id}"
         self._attr_icon = "mdi:refresh"
 
     async def async_press(self) -> None:
