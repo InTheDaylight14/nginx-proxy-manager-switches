@@ -167,8 +167,8 @@ class NpmSwitchesCertSensor(NpmSwitchesEntity, SensorEntity):
         super().__init__(coordinator, entry)
         self.cert_id = str(certificate["id"])
         self.name = "Certificate " + certificate["domain_names"][0]
-        self.entity_id = "sensor."+slugify(f"{entry.title}")+" Cert "+str(self.cert_id)
-        self._attr_unique_id = f"{entry.entry_id} {" Cert "} {self.cert_id}"
+        self.entity_id = "sensor."+slugify(f"{entry.title}")+"_cert_"+str(self.cert_id)
+        self._attr_unique_id = f"{entry.entry_id} {"_cert_"} {self.cert_id}"
         self._attr_device_class = SensorDeviceClass.TIMESTAMP
         self._expires_on: Optional[datetime] = None
 
